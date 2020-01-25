@@ -18,7 +18,9 @@
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "league/fractal": "^0.18.0"
     },
     "config": {
         "optimize-autoloader": true,
