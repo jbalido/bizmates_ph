@@ -7,6 +7,7 @@ $(document).ready(function(){
 		var id    = $(this).attr('data-id');
 
 		$('input[name=auto_suggest]').val(place);
+		$('input[name=hidden_place_id]').val(id);
 		$('.auto_suggested_places').hide().fadeOut().remove();
 
 		$.ajaxSetup({
@@ -22,18 +23,31 @@ $(document).ready(function(){
 			 id: id
 		},
 		success: function(result){
-	 		$('body').html(result);
+	 		$('.recommendations_pagination_container').html(result);
+			randomBackground();
+
+			$("html, body").animate({
+		        scrollTop: 500
+		    }, 800);
 		}});
 	});
 
 	$('input[name=auto_suggest]').on('keyup',function(){
+		searchPlace($(this).val());		
+	});
+
+	$('form#search_form').submit(function(e){
+		e.preventDefault();
+	});
+
+	function searchPlace(place){
 		$.ajaxSetup({
 		  headers: {
 		      'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		  }
 		});
 
-		var place = $(this).val();
+		var place = place;
 
 		if (place.length == 0)
 			$('.auto_suggested_places').hide().fadeOut().remove();
@@ -64,8 +78,19 @@ $(document).ready(function(){
 	 			$("<div class='auto_suggested_places'><p>No Match Found.</p></div>").hide().appendTo(".search_bar").fadeIn();
 	 		}
 		}});
+	}
 
-	});
+
+	function randomBackground()
+	{
+
+		$('.recommendation_details').each(function(i, obj) {
+			var n1 = Math.floor(Math.random() * 255);
+			var n2 = Math.floor(Math.random() * 255);
+			var n3 = Math.floor(Math.random() * 255);
+		    $(this).css('background','rgba('+n1+','+n2+','+n3+',0.5)');
+		});
+	}
 })
 
 

@@ -2,13 +2,10 @@ html, body {
     color: #FFF !important;
     font-family: 'Nunito', sans-serif;
     font-weight: 200;
-    height: 100vh;
-    margin: 0;
+    height: auto;
+    min-height: 1050px;
     background-color: rgba(0, 0, 0, 0.3) !important;
-}
-
-.full-height {
-    height: 100vh;
+    width: 100%;
 }
 
 .flex-center {
@@ -68,6 +65,7 @@ input.transparent-input:active{
    caret-color: #fff;
    color: #fff;
    width: 100%;
+   padding-left: 10px;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -89,14 +87,93 @@ input.transparent-input:active{
 
 .auto_suggested_places{
     position: absolute;
+    z-index: 999;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .auto_suggested_places p{
     text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-bottom: 0;
+}
+
+.auto_suggested_places p:hover{
+  background: rgba(213, 78, 133, 0.5);
 }
 
 .auto_suggested_places p a{
     color: #fff;
     text-decoration: none;
-    font-size: 30px;
+    font-size: 20px;
+    display: block;
+    width: 100%;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+#recommendations_container{
+  margin-top: 25px;
+}
+
+.place_description{
+  padding-bottom: 20px;
+}
+
+.place_description h4{
+  font-size: 50px !important;
+}
+
+#map{
+  height: 500px;
+}
+
+.slogan_1{
+  color: #fff;
+}
+
+.slogan_2{
+  color: #BC002D;
+}
+
+.slogan_3{
+  color: #efebd6;
+}
+
+hr{
+  border: 1px solid #fff;
+}
+
+.tagline h3{
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.page-link{
+  color: #fff!important;
+  /*pointer-events: none;*/
+  cursor: pointer;
+  background-color: rgba(255,255,255,0.3)!important;
+  border-color: #fff;
+  border: none!important;
+}
+
+.active .page-link,
+.page-link:hover{
+  background-color: rgba(0,0,0,0.7)!important;
+}
+
+@media(max-width: 768px)
+{
+  .display-1{
+    font-size: 3rem !important;
+  }
+
+  input.transparent-input,
+  input.transparent-input:active{
+    font-size: 15px;
+  }
 }

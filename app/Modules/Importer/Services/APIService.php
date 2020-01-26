@@ -52,12 +52,17 @@ class APIService implements APIServiceInterface
         ];
     }
 
+    public function setApiUrl($url)
+    {
+        $this->apiUrl = $url;
+    }
+
     /**
      * Get response from the API provider
      *
      * @return mixed|ResponseInterface
      */
-    public function get($query)
+    public function get($query,$is_weather=false)
     {
         // GuzzleClient removed the trailing slash from the provided URL
         // Which causing different return data from the API Provider
@@ -73,13 +78,33 @@ class APIService implements APIServiceInterface
         $promise->wait();
 
         // For the mean time will use file_get_contents
-        $response = file_get_contents($this->apiUrl.$query);
+        if(!$is_weather)
+            $response = file_get_contents($this->apiUrl.$query);
+        else
+            $response = $this->callWeather($this->apiUrl.$query);
 
         if (!$this->isJson($response)) {
             $response = json_encode(simplexml_load_string('<xml>' . $response . '</xml>'));
         }
 
         return $response;
+    }
+
+    private function callWeather($url)
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        $curl_response = curl_exec($curl);
+        if ($curl_response === false) {
+            $info = curl_getinfo($curl);
+            curl_close($curl);
+            die('error occured during curl exec. Additioanl info: ' . var_export($info));
+        }
+
+        curl_close($curl);
+
+        return $curl_response;
     }
 
     /**

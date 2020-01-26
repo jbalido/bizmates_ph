@@ -42,6 +42,6 @@ class Recommendation extends Model
 
     public function place()
     {
-        return $this->belongsTo('App\Modules\Importer\Models\Place')->limit(15);
+        return $this->belongsTo('App\Modules\Importer\Models\Place');
     }
 }

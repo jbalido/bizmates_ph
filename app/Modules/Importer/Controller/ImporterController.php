@@ -65,16 +65,12 @@ class ImporterController extends Controller
         $request['id'] = $place;
         app('App\Modules\Importer\Requests\PlaceDetailsRequest');
 
-        $details = $this->importerService->getDetails($request->get('id'));
+        $place           = $this->importerService->getPlace($request->get('id'));
+        $details         = $this->importerService->getDetails($request->get('id'));
+        $recommendations = $this->importerService->rebuildDetails();
+        $weather         = $this->importerService->getWeather($place['data']['name']);
 
-        /*$response = [
-            'message' => $details['data'] ? 'Success.' : 'Place not found.',
-            'data' => $details['data']
-        ];
-
-        return Response::json($response, 200);*/
-
-        return view('welcome',compact('details'));
+        return view('presult',compact('details','place','recommendations','weather'));
     }
 
     public function populate()

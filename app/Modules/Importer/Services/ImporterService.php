@@ -14,6 +14,8 @@ use App\Modules\Importer\Services\Contracts\APIServiceInterface;
 use App\Modules\Importer\Services\Contracts\ImporterServiceInterface;
 use App\Modules\Importer\Transformers\PlaceDetailsTransformer;
 use App\Modules\Importer\Transformers\PlaceTransformer;
+use App\Modules\Importer\Transformers\SinglePlaceTransformer;
+use App\Modules\Importer\Transformers\RecommendationTransformer;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -50,6 +52,11 @@ class ImporterService implements ImporterServiceInterface
     protected $manager;
 
     /**
+     * @var array
+     */
+    protected $details;
+
+    /**
      * ImporterService constructor.
      *
      * @param APIServiceInterface $apiService
@@ -70,13 +77,46 @@ class ImporterService implements ImporterServiceInterface
      *
      * @return mixed
      */
+    public function getPlace($place)
+    {
+        if (!$place = $this->placeRepository->getPlace($place)) {
+            return [];
+        }
+
+        $resources = new Item($place, new SinglePlaceTransformer);
+
+        return $this->manager
+            ->createData($resources)
+            ->toArray();
+    }
+
+    /**
+     * Get current weather
+     *
+     * @return array
+     */
+    public function getWeather($location)
+    {
+        $weather_mapper = config('api.weather_url');
+
+        $this->apiService->setApiUrl($weather_mapper);
+        $weather = json_decode($this->apiService->get('?q='.$location.'&appid='.config('api.weather_app'),true),true);
+
+        return $weather;
+    }
+
+    /**
+     * Get list of places by query
+     *
+     * @return mixed
+     */
     public function getPlaces($place)
     {
         if (!$list = $this->placeRepository->listPlaces($place)) {
             return [];
         }
 
-        $paginator = $list->paginate();
+        $paginator  = $list->paginate();
         $places     = $paginator->getCollection();
 
         $resources = new Collection($places, new PlaceTransformer);
@@ -95,16 +135,25 @@ class ImporterService implements ImporterServiceInterface
      */
     public function getDetails(int $place)
     {
-        if (!$details = $this->recommendationRepository->details($place)) {
+        if (!$this->details = $this->recommendationRepository->details($place)) {
             return [];
         }
         
-        return $details;
-        /*$resources = new Item($details, new PlaceDetailsTransformer);
+        return $this->details;
+    }
+
+    /**
+     * Rebuild recommendation details
+     *
+     * @return array
+     */
+    public function rebuildDetails()
+    {
+        $resources = new Item($this->details, new RecommendationTransformer);
 
         return $this->manager
             ->createData($resources)
-            ->toArray();*/
+            ->toArray();
     }
 
     /**

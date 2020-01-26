@@ -18,140 +18,56 @@
     </head>
     <body>
         <img id="background-img" src="{{ URL::to('/assets/img/12202.jpg') }}">
-        <div class="flex-center position-ref full-height">
-            
-            <section>
-                <div class="container-fluid">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="content">
-                                    <div class="title m-b-md">
-                                        <h1 class="display-1 font-weight-bolder">Welcome to Japan!</h1>
-                                        <h2>日本へようこそ</h2>
-                                    </div>
+    
+        <section>
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10 offset-1 mt-5 mb-3 pt-5 pb-2">
+                            <div class="content">
+                                <div class="title m-b-md">
+                                    <h1 class="display-1 font-weight-bolder">Welcome to Japan!</h1>
+                                    <h2>日本へようこそ</h2>
+                                </div>
 
-                                    <div>
-                                        <h3>Please enter your destination</h3>
-                                        <form id='search_form'>
-                                            <div class="form-row">
-                                                <div class="col-12">
-                                                    <div class="inner-addon right-addon search_bar">
-                                                      <i class="glyphicon glyphicon-search"></i>
-                                                      <input type="text" class="transparent-input" placeholder="Search . . ." name="auto_suggest" />
-                                                    </div>
+                                <div class="form_container">
+                                    <h3>
+                                        <span class="slogan_1">Wander.</span>
+                                        <span class="slogan_2">Explore.</span>
+                                        <span class="slogan_3">Discover.</span>
+                                    </h3>
+                                    <form id='search_form'>
+                                        <div class="form-row mt-5">
+                                            <div class="col-12">
+                                                <div class="inner-addon right-addon search_bar">
+                                                  <i class="glyphicon glyphicon-search"></i>
+                                                  <input type="text" class="transparent-input" placeholder="Know your destination . . . 目的地を知る . . ." name="auto_suggest" />
+                                                  <input type='hidden' name='hidden_place_id'>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section> 
-                <div class="container-fluid">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <div id="recommendations_container">
-                                    @include('presult')
-                                </div>
+        <section class="recomm_section"> 
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10 offset-1">
+                            <div id="recommendations_container">
+                                @include('presult')
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-
-        </div>
-
-        
-        <script type="text/javascript">
-
-            $(window).on('hashchange', function() {
-
-                    if (window.location.hash) {
-
-                        var page = window.location.hash.replace('#', '');
-
-                        if (page == Number.NaN || page <= 0) {
-
-                            return false;
-
-                        }else{
-
-                            getData(page);
-
-                        }
-
-                    }
-
-                });
-
-
-
-            $(document).ready(function()
-
-            {
-
-                 $(document).on('click', '.pagination a',function(event)
-
-                {
-
-                    event.preventDefault();
-
-                    $('li').removeClass('active');
-
-                    $(this).parent('li').addClass('active');
-
-                    var myurl = $(this).attr('href');
-
-                    var page=$(this).attr('href').split('page=')[1];
-
-                    getData(page);
-
-                });
-
-            });
-
-
-
-            function getData(page){
-
-                    $.ajax(
-
-                    {
-
-                        url: '?page=' + page,
-
-                        type: "get",
-
-                        datatype: "html"
-
-                    })
-
-                    .done(function(data)
-
-                    {
-
-                        $("#tag_container").empty().html(data);
-
-                        location.hash = page;
-
-                    })
-
-                    .fail(function(jqXHR, ajaxOptions, thrownError)
-
-                    {
-
-                          alert('No response from server');
-
-                    });
-
-            }
-
-        </script>
+            </div>
+        </section>
+        <script src="{{ URL::to('/assets/js/footer.js') }}"></script>
     </body>
 </html>
