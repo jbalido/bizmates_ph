@@ -10,7 +10,13 @@ return [
     'mapper' => [
         'root' => 'response',
         'response' => [
-            'geocode' => 'geocode', //place details
+            'fields' => [
+                'lat',
+                'lng',
+                'displayString',
+                'slug',
+                'longId'
+            ], //place details
             'groups' => [ //recommended places
                 'items' => [
                     'venue' => [

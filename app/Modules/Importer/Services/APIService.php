@@ -57,11 +57,11 @@ class APIService implements APIServiceInterface
      *
      * @return mixed|ResponseInterface
      */
-    public function get()
+    public function get($query)
     {
         // GuzzleClient removed the trailing slash from the provided URL
         // Which causing different return data from the API Provider
-        $promise = $this->client->getAsync($this->apiUrl, $this->header)->then(
+        $promise = $this->client->getAsync($this->apiUrl.$query, $this->header)->then(
             function ($response) {
                 return $response->getBody()->getContents();
             },
@@ -73,7 +73,7 @@ class APIService implements APIServiceInterface
         $promise->wait();
 
         // For the mean time will use file_get_contents
-        $response = file_get_contents($this->apiUrl);
+        $response = file_get_contents($this->apiUrl.$query);
 
         if (!$this->isJson($response)) {
             $response = json_encode(simplexml_load_string('<xml>' . $response . '</xml>'));

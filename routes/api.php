@@ -19,7 +19,7 @@ Route::group(['namespace' => '\App\Modules\Importer\Controller', 'prefix' => 'v1
             ->name('importer.place.list');
         Route::get('/{place}', 'ImporterController@details')
             ->name('importer.place.details');
-        Route::post('/', 'ImporterController@populate')
+        Route::post('/populate', 'ImporterController@populate')
             ->name('importer.place.populate');
     });
 });

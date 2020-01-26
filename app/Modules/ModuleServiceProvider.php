@@ -41,7 +41,6 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadModuleServiceRoutes();
         $this->loadModuleServiceViews();
     }
 
@@ -53,28 +52,6 @@ class ModuleServiceProvider extends ServiceProvider
     public function register()
     {
         //
-    }
-
-    /**
-     * Load module service routes
-     *
-     * @return void
-     */
-    public function loadModuleServiceRoutes()
-    {
-        foreach ($this->modules as $module => $service) {
-            if (is_array($service)) {
-                foreach ($service as $srvc) {
-                    if (file_exists($this->baseDirectory . '/' . $module . '/' . $srvc . '/routes.php')) {
-                        include $this->baseDirectory . '/' . $module . '/' . $srvc . '/routes.php';
-                    }
-                }
-            } else {
-                if (file_exists($this->baseDirectory . '/' . $service . '/routes.php')) {
-                    include $this->baseDirectory . '/' .$service . '/routes.php';
-                }
-            }
-        }
     }
 
     /**

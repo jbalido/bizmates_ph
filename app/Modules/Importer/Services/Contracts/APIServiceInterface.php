@@ -16,5 +16,5 @@ interface APIServiceInterface
      *
      * @return mixed
      */
-    public function get();
+    public function get($query);
 }

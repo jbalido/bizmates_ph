@@ -27,7 +27,7 @@ class Place extends Model
         'query',
         'lat',
         'lng',
-        'display_string',
+        'displayString',
         'slug',
         'longId'
     ];

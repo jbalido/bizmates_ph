@@ -77,6 +77,16 @@ class ImporterController extends Controller
 
     public function populate()
     {
-        $this->importerService->populate();
+        $populated = $this->importerService->populate();
+
+        $response = [
+            'message' => $populated ? 'Success.' : 'No data found.',
+            'data' => $populated
+        ];
+        
+        if($populated)
+            return Response::json($response, 200);
+        else
+            return Response::json($response, 403);
     }
 }

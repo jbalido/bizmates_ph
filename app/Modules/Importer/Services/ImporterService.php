@@ -103,24 +103,44 @@ class ImporterService implements ImporterServiceInterface
      */
     public function populate()
     {
-        $mapper = config('api.mapper');
-        $elements = collect(json_decode($this->apiService->get()))
-           ->pull($mapper['root']);
+        $places = $this->placeRepository->list()->get()->toArray();
 
-        if ($elements) {
-            foreach ($elements as $element) {
-                $data = collect();
+        foreach ($places as $key => $place) {
+            $mapper   = config('api.mapper');
+            $elements = collect(json_decode($this->apiService->get($place['query'])))
+               ->pull($mapper['root']);
 
-                foreach ($mapper['fields'] as $key => $value) {
-                    $data->put($key, $element->{$value});
+            if ($elements) {
+                $geocodes = isset($elements->geocode) ? (array) $elements->geocode:[];
+
+                if(!empty($geocodes)){
+
+                    $data = collect();
+
+                    foreach ($mapper['response']['fields'] as $key => $value) {
+                        
+                        if(isset($geocodes['center']->{$value}))
+                            $data->put($value, $geocodes['center']->{$value});        
+                        else
+                            $data->put($value, $geocodes[$value]);
+                    }
+
+                    $slug   = $data->pull('slug');
+                    $result = $this->placeRepository->add(
+                        ['slug' =>  $slug],
+                        $data->toArray()
+                    );
+
+                    $recommendations = isset($elements->groups) ? (array) current($elements->groups): [];
+
+                    foreach ($recommendations['items'] as $recommendation) {
+                        dd($recommendation);
+                    }
+
                 }
-
-                $code = $data->pull('code');
-                $this->placeRepository->add(
-                    ['code' =>  $code],
-                    $data->toArray()
-                );
             }
+
+            return $data->toArray();
         }
 
         return false;
