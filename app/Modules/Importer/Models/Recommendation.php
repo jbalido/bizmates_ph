@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Recommendation extends Model
 {
+
     /**
      * @var array $fillable
      */
@@ -41,6 +42,6 @@ class Recommendation extends Model
 
     public function place()
     {
-        return $this->belongsTo('App\Modules\Importer\Models\Place');
+        return $this->belongsTo('App\Modules\Importer\Models\Place')->limit(15);
     }
 }

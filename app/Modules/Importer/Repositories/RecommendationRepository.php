@@ -43,16 +43,14 @@ class RecommendationRepository implements PlaceRepositoryInterface
     }
 
     /**
-     * Get details of a single recommmendation
+     * Get details of recommmendation
      *
-     * @param int $recommmendation
+     * @param int $place_id
      * @return mixed
      */
-    public function details(int $recommmendation)
+    public function details(int $place_id)
     {
-        return $this->model
-            ->where('id', $recommmendation)
-            ->first();
+        return $this->model::where('place_id', $place_id)->paginate();
     }
 
     /**

@@ -23,16 +23,19 @@ class PlaceDetailsTransformer extends TransformerAbstract
      */
     public function transform(Place $place)
     {
+        $datum = $place->toArray();
+        
+        foreach ($datum['recommendation'] as $key => &$value) {
+            $value['location']   = (array) json_decode($value['location']);
+            $value['categories'] = json_decode($value['categories']);
+            $value['contact']    = json_decode($value['contact']);
+        }
+
         return [
-            'id' => $place->getAttributeValue('id'),
-            'code' => $place->getAttributeValue('code'),
-            'first_name' => $place->getAttributeValue('first_name'),
-            'second_name' => $place->getAttributeValue('second_name'),
-            'total_points' => $place->getAttributeValue('total_points'),
-            'influence' => $place->getAttributeValue('influence'),
-            'creativity' => $place->getAttributeValue('creativity'),
-            'threat' => $place->getAttributeValue('threat'),
-            'ict_index' => $place->getAttributeValue('ict_index')
+            'displayString' => $datum['displayString'],
+            'lat' => $datum['lat'],
+            'lng' => $datum['lng'],
+            'recommendation' => $datum['recommendation']
         ];
     }
 }

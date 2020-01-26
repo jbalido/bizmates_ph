@@ -40,9 +40,9 @@ class ImporterController extends Controller
      *
      * @return JsonResponse
      */
-    public function list()
+    public function list(Request $request)
     {
-        $list = $this->importerService->getList();
+        $list = $this->importerService->getPlaces($request->get('place'));
 
         $response = [
             'message' => $list['data'] ? 'Success.' : 'No record found.',
@@ -67,12 +67,14 @@ class ImporterController extends Controller
 
         $details = $this->importerService->getDetails($request->get('id'));
 
-        $response = [
+        /*$response = [
             'message' => $details['data'] ? 'Success.' : 'Place not found.',
             'data' => $details['data']
         ];
 
-        return Response::json($response, 200);
+        return Response::json($response, 200);*/
+
+        return view('welcome',compact('details'));
     }
 
     public function populate()

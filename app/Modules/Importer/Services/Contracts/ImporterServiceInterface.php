@@ -16,10 +16,10 @@ interface ImporterServiceInterface
 {
     /**
      * Get list of places
-     *
+     * @param str $place
      * @return mixed
      */
-    public function getList();
+    public function getPlaces($place);
 
     /**
      * Get details of a single place

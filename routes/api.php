@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['namespace' => '\App\Modules\Importer\Controller', 'prefix' => 'v1/importer/'], function () {
     Route::group(['prefix' => 'place'], function () {
-        Route::get('/', 'ImporterController@list')
+        Route::get('/search/{place}', 'ImporterController@list')
             ->name('importer.place.list');
-        Route::get('/{place}', 'ImporterController@details')
+        Route::get('/details/{place}', 'ImporterController@details')
             ->name('importer.place.details');
         Route::post('/populate', 'ImporterController@populate')
             ->name('importer.place.populate');

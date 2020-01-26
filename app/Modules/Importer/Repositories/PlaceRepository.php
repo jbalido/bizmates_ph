@@ -50,9 +50,13 @@ class PlaceRepository implements PlaceRepositoryInterface
      */
     public function details(int $places)
     {
-        return $this->model
-            ->where('id', $places)
-            ->first();
+        $details = $this->model::find($places);
+            /*->where('id', $places)
+            ->first();*/
+
+        $details->setRelation('recommendation', $details->recommendation()->paginate(10));
+
+        return $details;
     }
 
     /**
@@ -65,5 +69,16 @@ class PlaceRepository implements PlaceRepositoryInterface
     public function add(array $key, array $data)
     {
         return $this->model::updateOrCreate($key, $data);
+    }
+
+    /**
+     * Get list of place names
+     *
+     * @return mixed
+     */
+
+    public function listPlaces($place)
+    {
+        return $this->model::where('name','LIKE','%'.$place.'%');
     }
 }

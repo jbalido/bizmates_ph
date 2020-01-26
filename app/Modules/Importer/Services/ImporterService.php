@@ -66,20 +66,20 @@ class ImporterService implements ImporterServiceInterface
     }
 
     /**
-     * Get list of places
+     * Get list of places by query
      *
      * @return mixed
      */
-    public function getList()
+    public function getPlaces($place)
     {
-        if (!$list = $this->placeRepository->list()) {
+        if (!$list = $this->placeRepository->listPlaces($place)) {
             return [];
         }
 
         $paginator = $list->paginate();
-        $buses = $paginator->getCollection();
+        $places     = $paginator->getCollection();
 
-        $resources = new Collection($buses, new PlaceTransformer);
+        $resources = new Collection($places, new PlaceTransformer);
         $resources->setPaginator(new IlluminatePaginatorAdapter($paginator));
 
         return $this->manager
@@ -95,15 +95,16 @@ class ImporterService implements ImporterServiceInterface
      */
     public function getDetails(int $place)
     {
-        if (!$details = $this->placeRepository->details($place)) {
+        if (!$details = $this->recommendationRepository->details($place)) {
             return [];
         }
-
-        $resources = new Item($details, new PlaceDetailsTransformer);
+        
+        return $details;
+        /*$resources = new Item($details, new PlaceDetailsTransformer);
 
         return $this->manager
             ->createData($resources)
-            ->toArray();
+            ->toArray();*/
     }
 
     /**

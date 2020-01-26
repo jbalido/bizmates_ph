@@ -25,7 +25,7 @@ class PlaceTransformer extends TransformerAbstract
     {
         return [
             'id' => $place->getAttributeValue('id'),
-            'full_name' => $place->getAttributeValue('first_name') . ' ' . $place->getAttributeValue('second_name')
+            'name' => $place->getAttributeValue('name')
         ];
     }
 }
