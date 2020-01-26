@@ -14,7 +14,7 @@ class CreateRecommendationsTable extends Migration
     public function up()
     {
         Schema::create('recommendations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('id');
             $table->bigInteger('place_id');
             $table->string('name', 250);
             $table->string('contact', 50);

@@ -23,6 +23,7 @@ class Recommendation extends Model
      * @var array $fillable
      */
     protected $fillable = [
+        'id',
         'place_id',
         'name',
         'contact',

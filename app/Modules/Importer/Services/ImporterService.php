@@ -20,6 +20,9 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
+use App\Modules\Importer\Repositories\PlaceRepository;
+use App\Modules\Importer\Repositories\RecommendationRepository;
+
 /**
  * Class ImporterService
  * @package App\Modules\Importer\Services
@@ -37,6 +40,11 @@ class ImporterService implements ImporterServiceInterface
     protected $placeRepository;
 
     /**
+     * @var PlaceRepositoryInterface
+     */
+    protected $recommendationRepository;
+
+    /**
      * @var Manager $manager
      */
     protected $manager;
@@ -48,11 +56,13 @@ class ImporterService implements ImporterServiceInterface
      * @param PlaceRepositoryInterface $placeRepository
      * @param Manager $manager
      */
-    public function __construct(APIServiceInterface $apiService, PlaceRepositoryInterface $placeRepository, Manager $manager)
+    public function __construct(APIServiceInterface $apiService, PlaceRepository $placeRepository, RecommendationRepository $recommendationRepository, Manager $manager)
     {
         $this->apiService = $apiService;
         $this->placeRepository = $placeRepository;
+        $this->recommendationRepository = $recommendationRepository;
         $this->manager = $manager;
+
     }
 
     /**
@@ -103,7 +113,7 @@ class ImporterService implements ImporterServiceInterface
      */
     public function populate()
     {
-        $places = $this->placeRepository->list()->get()->toArray();
+        $places = $this->placeRepository->list()->get() ? $this->placeRepository->list()->get()->toArray():false;
 
         foreach ($places as $key => $place) {
             $mapper   = config('api.mapper');
@@ -134,15 +144,29 @@ class ImporterService implements ImporterServiceInterface
                     $recommendations = isset($elements->groups) ? (array) current($elements->groups): [];
 
                     foreach ($recommendations['items'] as $recommendation) {
-                        dd($recommendation);
-                    }
+                        
+                        $collection = collect();
+                        
+                        foreach ($mapper['response']['groups'] as $group) {
 
+                            $collection->put('place_id',$result->id);
+
+                            if(is_array($recommendation->venue->{$group}) || is_object($recommendation->venue->{$group}))
+                                $collection->put($group,json_encode($recommendation->venue->{$group}));    
+                            else
+                                $collection->put($group,$recommendation->venue->{$group});
+                        }
+
+                        $id   = $data->pull('id');
+                        $this->recommendationRepository->add(
+                            ['id' =>  $id],
+                            $collection->toArray()
+                        );
+                    }
                 }
             }
-
-            return $data->toArray();
         }
 
-        return false;
+        return $places;
     }
 }

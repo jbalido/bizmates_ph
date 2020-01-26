@@ -50,5 +50,10 @@ class ImporterServiceProvider extends ServiceProvider
             'App\Modules\Importer\Repositories\Contracts\PlaceRepositoryInterface',
             'App\Modules\Importer\Repositories\PlaceRepository'
         );
+
+        $this->app->bind(
+            'App\Modules\Importer\Repositories\Contracts\PlaceRepositoryInterface',
+            'App\Modules\Importer\Repositories\RecommendationRepository'
+        );
     }
 }

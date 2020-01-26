@@ -18,15 +18,11 @@ return [
                 'longId'
             ], //place details
             'groups' => [ //recommended places
-                'items' => [
-                    'venue' => [
-                        'id' => 'id',
-                        'name' => 'name',
-                        'contact' => 'contact',
-                        'location' => 'location',
-                        'categories' => 'categories'
-                    ],
-                ],
+                'id' => 'id',
+                'name' => 'name',
+                'contact' => 'contact',
+                'location' => 'location',
+                'categories' => 'categories'
             ],
         ],
     ]
