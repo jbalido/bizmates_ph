@@ -18,3 +18,9 @@ Tokyo, Yokohama, Kyoto, Osaka, Sapporo, Nagoya.
 
 The UI and UX implementation was designed to become easy to understand and to be usable by any age. 
 The code implementation is the best because it is written with the best standards adhering the SOLID principle of Object Oriented Programming. I also architect it to save the place information provided by the API provider into the local database to improve speed and minimize downtime.
+
+## Installation
+1.) Composer Install
+2.) Run Migration
+3.) Run Seeding
+4.) Populate Place Table by going to /api/v1/importer/place/populate
